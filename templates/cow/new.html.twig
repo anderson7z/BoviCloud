@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Novo Gado{% endblock %}
+
+{% block body %}
+    <h1>Adicionar novo Gado</h1>
+
+    {{ include('cow/_form.html.twig') }}
+    <br>
+    <a href="{{ path('app_cow_index') }}" class="btn btn-secondary">
+    <i class="fas fa-arrow-left"></i> Voltar à lista
+</a>
+
+{% endblock %}

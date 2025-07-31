@@ -1,0 +1,76 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Lista de Animais para Abate{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-skull-crossbones text-danger"></i> Animais Elegíveis para Abate</h1>
+        <a href="{{ path('app_cow_index') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+    </div>
+
+    <div class="alert alert-warning" role="alert">
+        A lista abaixo mostra todos os animais que atendem a <strong>pelo menos um</strong> dos critérios para abate.
+    </div>
+    
+
+    <div class="mb-3">
+        <strong>{{ pagination.getTotalItemCount }}</strong> animais encontrados.
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Código</th>
+                    <th>Fazenda</th>
+                    <th>Critérios Atendidos (Motivo)</th>
+                    <th class="text-center">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+            {% for cow in pagination %}
+                <tr>
+                    <td>
+                        <a href="{{ path('app_cow_show', {'id': cow.id}) }}">
+                            <strong>{{ cow.codigo }}</strong>
+                        </a>
+                    </td>
+                    <td>{{ cow.fazenda.nome }}</td>
+                    <td>
+                        
+                        {% set age = date().diff(cow.nascimento) %}
+                        {% if age.y >= 5 %}<span class="badge bg-secondary me-1" title="Idade superior a 5 anos">Idade: {{ age.y }} anos</span>{% endif %}
+                        {% if cow.leite < 40 %}<span class="badge bg-secondary me-1" title="Produção de leite inferior a 40L/semana">Leite: {{ cow.leite }} L</span>{% endif %}
+                        {% if cow.leite < 70 and (cow.racao / 7) > 50 %}<span class="badge bg-secondary me-1" title="Consumo de ração desproporcional à produção de leite">Ração/Leite</span>{% endif %}
+                        {% if cow.peso > 270 %}<span class="badge bg-secondary me-1" title="Peso superior a 18 arrobas (270 Kg)">Peso: {{ cow.peso|number_format(0) }} Kg</span>{% endif %}
+                    </td>
+                    <td class="text-center">
+                        <form method="post" action="{{ path('app_cow_slaughter', {'id': cow.id}) }}" onsubmit="return confirm('Tem certeza que deseja enviar o animal {{ cow.codigo }} para o abate?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('slaughter' ~ cow.id) }}">
+                            <button class="btn btn-danger btn-sm"><i class="fas fa-gavel"></i> Abater</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center py-4">
+                        Nenhum animal atende aos critérios para abate no momento.
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+   
+    <div class="navigation d-flex justify-content-center mt-4">
+        {{ knp_pagination_render(pagination, 'pagination/custom_pagination.html.twig') }}
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nova Fazenda{% endblock %}
+
+{% block body %}
+    <h1>Criar nova Fazenda</h1>
+
+    {{ include('farm/_form.html.twig') }}
+    <br>
+ <a href="{{ path('app_farm_index') }}" class="btn btn-secondary">
+    <i class="fas fa-arrow-left"></i> Voltar à lista
+</a>
+
+{% endblock %}
