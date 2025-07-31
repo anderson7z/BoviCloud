@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if selected_vet %}
+        Painel - {{ selected_vet.nome }}
+    {% else %}
+        Painel Geral
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+       
+        <h1>
+            <i class="fas fa-tachometer-alt"></i> 
+            {% if selected_vet %}
+                Painel: <span class="text-primary">{{ selected_vet.nome }}</span>
+            {% else %}
+                Painel Geral
+            {% endif %}
+        </h1>
+
+      
+        <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-filter"></i>
+                Filtrar por Veterinário
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="filterDropdown">
+                <li><a class="dropdown-item {% if not selected_vet %}active{% endif %}" href="{{ path('app_main') }}">Ver Painel Geral</a></li>
+                <li><hr class="dropdown-divider"></li>
+                {% for vet in all_veterinarians %}
+                    <li>
+                        <a class="dropdown-item {% if selected_vet and selected_vet.id == vet.id %}active{% endif %}" href="{{ path('app_main', {'vet_id': vet.id}) }}">{{ vet.nome }}</a>
+                    </li>
+                {% else %}
+                    <li><span class="dropdown-item-text">Nenhum veterinário cadastrado.</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+       
+    </div>
+
+   
+    <div class="row">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-tint"></i> Leite Total</h5>
+                    <p class="card-text fs-2 fw-bold">{{ totalMilk|number_format(0, ',', '.') }} L/semana</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-seedling"></i> Ração Total</h5>
+                    <p class="card-text fs-2 fw-bold">{{ totalRation|number_format(0, ',', '.') }} Kg/semana</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-cow"></i> Animais Vivos</h5>
+                    <p class="card-text fs-2 fw-bold">{{ totalCows }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 text-white bg-secondary">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-tractor"></i> Fazendas</h5>
+                    <p class="card-text fs-2 fw-bold">{{ totalFarms }}</p>
+                    {% if selected_vet %}
+                        <small>Atendidas por este veterinário</small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Relatório: Jovens de Alto Consumo</h3>
+            <p class="text-muted small">(Até 1 ano de idade e consomem > 500Kg/semana)</p>
+            <div class="list-group">
+                {% for cow in youngHeavyEaters %}
+                    <a href="{{ path('app_cow_show', {'id': cow.id}) }}" class="list-group-item list-group-item-action">
+                        <strong>{{ cow.codigo }}</strong> ({{ cow.fazenda.nome }}) - Consumo: {{ cow.racao }} Kg/semana
+                    </a>
+                {% else %}
+                    <div class="list-group-item">Nenhum animal atende a este critério{% if selected_vet %} para este veterinário{% endif %}.</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3>Relatório: Histórico de Abate</h3>
+             <p class="text-muted small">(Animais que já foram enviados para abate)</p>
+            <div class="list-group">
+                {% for cow in slaughteredCows %}
+                    <a href="{{ path('app_cow_show', {'id': cow.id}) }}" class="list-group-item list-group-item-action list-group-item-warning">
+                        <strong>{{ cow.codigo }}</strong> ({{ cow.fazenda.nome }}) - Status: Abatido
+                    </a>
+                {% else %}
+                     <div class="list-group-item">Nenhum animal abatido registrado{% if selected_vet %} para este veterinário{% endif %}.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

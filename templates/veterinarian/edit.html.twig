@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar Veterinário{% endblock %}
+
+{% block body %}
+    <h1>Editar Veterinário</h1>
+
+    {{ include('veterinarian/_form.html.twig', {'button_label': 'Atualizar'}) }}
+
+    {{ include('veterinarian/_delete_form.html.twig') }}
+    <br>
+   <a href="{{ path('app_veterinarian_index') }}" class="btn btn-secondary">
+    <i class="fas fa-arrow-left"></i> Voltar à lista
+</a>
+
+
+
+{% endblock %}

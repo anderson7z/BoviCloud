@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Veterinário{% endblock %}
+
+{% block body %}
+    <h1>Veterinário</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ veterinarian.id }}</td>
+            </tr>
+            <tr>
+                <th>Nome</th>
+                <td>{{ veterinarian.nome }}</td>
+            </tr>
+            <tr>
+                <th>CRMV</th>
+                <td>{{ veterinarian.crmv }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+  
+
+
+
+  <a href="{{ path('app_veterinarian_edit', {'id': veterinarian.id}) }}" class="btn btn-warning">
+    <i class="fas fa-edit"></i> Editar
+</a>
+
+
+    {{ include('veterinarian/_delete_form.html.twig') }}
+
+    <br>
+    <a href="{{ path('app_veterinarian_index') }}" class="btn btn-secondary">
+    <i class="fas fa-arrow-left"></i> Voltar à lista
+</a>
+{% endblock %}
+
+

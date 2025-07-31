@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Novo Veterinário{% endblock %}
+
+{% block body %}
+    <h1>Criar novo Veterinário</h1>
+    
+    {{ include('veterinarian/_form.html.twig') }}
+    <br>
+    <a href="{{ path('app_veterinarian_index') }}" class="btn btn-secondary">
+    <i class="fas fa-arrow-left"></i> Voltar à lista
+</a>
+
+{% endblock %}

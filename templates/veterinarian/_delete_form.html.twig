@@ -1,0 +1,8 @@
+<form method="post" action="{{ path('app_veterinarian_delete', {'id': veterinarian.id}) }}" 
+      onsubmit="return confirm('Tem certeza de que deseja excluir este item?');">
+      <br>
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ veterinarian.id) }}">
+    <button class="btn btn-danger">
+        <i class="fas fa-trash-alt"></i> Apagar
+    </button>
+</form>
