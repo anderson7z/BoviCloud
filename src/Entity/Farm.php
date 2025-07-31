@@ -50,8 +50,7 @@ class Farm
         $this->cows = new ArrayCollection();
     }
 
-    // ... (os métodos getId, getNome, setNome, etc. continuam os mesmos) ...
-    // ... eles foram omitidos aqui por brevidade, mas devem permanecer no seu arquivo ...
+
 
     public function getId(): ?int
     {
@@ -99,32 +98,27 @@ class Farm
         return $this->veterinarios;
     }
 
-    /**
-     * MELHORIA: Adicionado a sincronização do lado inverso.
-     */
+
     public function addVeterinario(Veterinarian $veterinario): static
     {
         if (!$this->veterinarios->contains($veterinario)) {
             $this->veterinarios->add($veterinario);
-            $veterinario->addFarm($this); // Sincroniza o outro lado
+            $veterinario->addFarm($this); 
         }
 
         return $this;
     }
 
-    /**
-     * MELHORIA: Adicionado a sincronização do lado inverso.
-     */
     public function removeVeterinario(Veterinarian $veterinario): static
     {
         if ($this->veterinarios->removeElement($veterinario)) {
-             $veterinario->removeFarm($this); // Sincroniza o outro lado
+             $veterinario->removeFarm($this); 
         }
 
         return $this;
     }
 
-    // Os métodos getCows, addCow e removeCow estão perfeitos e podem permanecer como estão.
+
     public function getCows(): Collection
     {
         return $this->cows;
@@ -143,7 +137,7 @@ class Farm
     public function removeCow(Cow $cow): static
     {
         if ($this->cows->removeElement($cow)) {
-            // set the owning side to null (unless already changed)
+          
             if ($cow->getFazenda() === $this) {
                 $cow->setFazenda(null);
             }

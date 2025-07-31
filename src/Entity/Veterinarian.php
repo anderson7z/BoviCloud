@@ -33,20 +33,8 @@ class Veterinarian
     #[Assert\NotBlank(message: 'O CRMV não pode ser vazio.')]
     private ?string $crmv = null;
     
-    /**
-     * ADICIONADO: Propriedade para a relação Muitos-para-Muitos com Farm.
-     * "mappedBy" indica que a configuração "dona" da relação está na entidade Farm,
-     * em uma propriedade chamada 'veterinarios'.
-     * @var Collection<int, Farm>
-     */
     #[ORM\ManyToMany(targetEntity: Farm::class, mappedBy: 'veterinarios')]
     private Collection $farms;
-
-    /**
-     * ADICIONADO: Construtor para inicializar a coleção.
-     * Isso é crucial para evitar erros ao tentar adicionar uma fazenda a um
-     * veterinário que ainda não foi salvo no banco de dados.
-     */
     public function __construct()
     {
         $this->farms = new ArrayCollection();
@@ -86,10 +74,7 @@ class Veterinarian
         return $this;
     }
 
-    /**
-     * ADICIONADO: O método que faltava para obter as fazendas.
-     * @return Collection<int, Farm>
-     */
+
     public function getFarms(): Collection
     {
         return $this->farms;

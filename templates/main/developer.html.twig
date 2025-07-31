@@ -1,0 +1,58 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Sobre o Desenvolvedor - Anderson A.Ramos{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card shadow-lg glass-card">
+        <div class="card-body p-5">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center">
+                    
+                    <img src="{{ asset('perfil.jpeg') }}" alt="Foto de Anderson A.Ramos" class="img-fluid rounded-circle mb-4" style="max-width: 200px; border: 5px solid var(--primary-color);">
+                </div>
+                <div class="col-md-8">
+                    <h1 class="card-title" style="color: var(--primary-dark);">Anderson Alves Ramos</h1>
+                    <h4 class="card-subtitle mb-3 text-muted">Desenvolvedor Full-Stack</h4>
+                    <p class="lead">
+                        Tenho 22 anos, sou natural de Januária - MG e sou apaixonado por tecnologia, física e pelo desenvolvimento de soluções criativas e eficientes. 
+                        Este projeto, BoviCloud, foi construído com Symfony e Docker, com o objetivo de demonstrar habilidades sólidas em desenvolvimento backend, 
+                        além de reforçar o compromisso com boas práticas de programação e arquitetura de software.
+                    </p>
+
+
+                    <hr>
+                    <h5 class="mt-4">Entre em Contato </h5>
+                    <div class="mt-3">
+                        <div style="display: flex; align-items: flex-start;">
+                            <div>
+                                <button onclick="toggleWhatsApp()" class="btn btn-success me-2">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                </button>
+                                <div id="whatsappNumber" style="display: none; margin-top: 10px;" class="text-muted">
+                                    <i class="fas fa-phone"></i> (38) 99106-0656
+                                </div>
+                                <script>
+                                    function toggleWhatsApp() {
+                                        const numberElement = document.getElementById('whatsappNumber');
+                                        numberElement.style.display = numberElement.style.display === 'none' ? 'block' : 'none';
+                                    }
+                                </script>
+                            </div>
+                            <a href="https://www.linkedin.com/in/anderson-alves-522788212" target="_blank" class="btn btn-primary" style="background-color: #0e76a8;">
+                            <i class="fab fa-linkedin"></i> LinkedIn
+                        </a>
+              
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <a href="{{ path('app_main') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i> Voltar ao Painel de Controle
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

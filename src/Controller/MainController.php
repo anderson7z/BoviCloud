@@ -19,13 +19,11 @@ class MainController extends AbstractController
         FarmRepository $farmRepository,
         VeterinarianRepository $veterinarianRepository
     ): Response {
-        // Encontra o veterinário selecionado, se houver um ID na URL.
-        // Se não houver, $selectedVet será null.
+
         $vetId = $request->query->get('vet_id');
         $selectedVet = $vetId ? $veterinarianRepository->find($vetId) : null;
 
-        // A lógica de busca de dados foi unificada.
-        // Os métodos do repositório agora aceitam o veterinário (ou null) como parâmetro.
+      
         $data = [
             'totalMilk' => $cowRepository->getTotalMilkProduction($selectedVet),
             'totalRation' => $cowRepository->getTotalRationConsumption($selectedVet),
@@ -35,10 +33,16 @@ class MainController extends AbstractController
             'totalCows' => $cowRepository->countForVeterinarian($selectedVet),
         ];
 
-        // Adiciona os dados adicionais para o template
+  
         $data['selected_vet'] = $selectedVet;
         $data['all_veterinarians'] = $veterinarianRepository->findBy([], ['nome' => 'ASC']);
 
         return $this->render('main/index.html.twig', $data);
+    }
+    #[Route('/developer', name: 'app_developer_info')]
+    public function developerInfo(): Response
+    {
+       
+        return $this->render('main/developer.html.twig');
     }
 }

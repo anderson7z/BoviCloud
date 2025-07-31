@@ -1,4 +1,4 @@
-{# templates/base.html.twig #}
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -8,12 +8,12 @@
 
     <link rel="icon" href="{{ asset('logo.png') }}">
     
-    <!-- Dependências Externas (CSS) -->
+
     <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    {# O bloco 'stylesheets' agora carrega nosso arquivo CSS customizado #}
+   
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     {% endblock %}
@@ -75,24 +75,26 @@
 
     <footer class="mt-auto py-4">
         <div class="container text-center">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-md-6 text-md-start">
                     <p class="mb-0">© {{ "now"|date("Y") }} BoviCloud - Sistema de Controle Veterinário</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p class="mb-0">
-                        <i class="fas fa-shield-alt me-2"></i>
-                        Desenvolvido por Anderson A.Ramos
+                        <i class="fas fa-code me-2"></i>
+                        Desenvolvido por 
+                   
+                        <a href="{{ path('app_developer_info') }}" class="fw-bold text-white" style="text-decoration: none;">Anderson A.Ramos</a>
                     </p>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Dependências Externas (JS) -->
+
     <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     
-    {# O bloco 'javascripts' agora carrega nosso arquivo JS customizado #}
+   
     {% block javascripts %}
         <script src="{{ asset('js/script.js') }}" defer></script>
     {% endblock %}
