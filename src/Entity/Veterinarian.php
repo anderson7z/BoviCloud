@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\VeterinarianRepository;
+use Doctrine\Common\Collections\ArrayCollection; // ADICIONADO: Necessário para a coleção
+use Doctrine\Common\Collections\Collection;      // ADICIONADO: Necessário para a tipagem da coleção
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity; 
@@ -31,6 +33,24 @@ class Veterinarian
     #[Assert\NotBlank(message: 'O CRMV não pode ser vazio.')]
     private ?string $crmv = null;
     
+    /**
+     * ADICIONADO: Propriedade para a relação Muitos-para-Muitos com Farm.
+     * "mappedBy" indica que a configuração "dona" da relação está na entidade Farm,
+     * em uma propriedade chamada 'veterinarios'.
+     * @var Collection<int, Farm>
+     */
+    #[ORM\ManyToMany(targetEntity: Farm::class, mappedBy: 'veterinarios')]
+    private Collection $farms;
+
+    /**
+     * ADICIONADO: Construtor para inicializar a coleção.
+     * Isso é crucial para evitar erros ao tentar adicionar uma fazenda a um
+     * veterinário que ainda não foi salvo no banco de dados.
+     */
+    public function __construct()
+    {
+        $this->farms = new ArrayCollection();
+    }
  
     public function __toString(): string
     {
@@ -62,6 +82,36 @@ class Veterinarian
     public function setCrmv(string $crmv): static
     {
         $this->crmv = $crmv;
+
+        return $this;
+    }
+
+    /**
+     * ADICIONADO: O método que faltava para obter as fazendas.
+     * @return Collection<int, Farm>
+     */
+    public function getFarms(): Collection
+    {
+        return $this->farms;
+    }
+
+    public function addFarm(Farm $farm): static
+    {
+        if (!$this->farms->contains($farm)) {
+            $this->farms->add($farm);
+            // Garante que o outro lado da relação também seja atualizado
+            $farm->addVeterinario($this); 
+        }
+
+        return $this;
+    }
+
+    public function removeFarm(Farm $farm): static
+    {
+        if ($this->farms->removeElement($farm)) {
+            // Garante que o outro lado da relação também seja atualizado
+            $farm->removeVeterinario($this);
+        }
 
         return $this;
     }

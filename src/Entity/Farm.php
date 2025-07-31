@@ -32,7 +32,12 @@ class Farm
     #[Assert\NotBlank(message: 'O nome do responsável é obrigatório.')]
     private ?string $responsavel = null;
 
-    #[ORM\ManyToMany(targetEntity: Veterinarian::class, cascade: ['persist'])]
+    /**
+     * CORRIGIDO: Adicionado "inversedBy: 'farms'" para criar a ligação bidirecional.
+     * Agora o Doctrine sabe que a propriedade 'farms' na entidade Veterinarian é o outro lado desta relação.
+     * @var Collection<int, Veterinarian>
+     */
+    #[ORM\ManyToMany(targetEntity: Veterinarian::class, inversedBy: 'farms', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'farm_veterinarian')]
     private Collection $veterinarios;
 
@@ -45,11 +50,8 @@ class Farm
         $this->cows = new ArrayCollection();
     }
 
-
-    public function __toString(): string
-    {
-        return (string) $this->nome;
-    }
+    // ... (os métodos getId, getNome, setNome, etc. continuam os mesmos) ...
+    // ... eles foram omitidos aqui por brevidade, mas devem permanecer no seu arquivo ...
 
     public function getId(): ?int
     {
@@ -97,22 +99,32 @@ class Farm
         return $this->veterinarios;
     }
 
+    /**
+     * MELHORIA: Adicionado a sincronização do lado inverso.
+     */
     public function addVeterinario(Veterinarian $veterinario): static
     {
         if (!$this->veterinarios->contains($veterinario)) {
             $this->veterinarios->add($veterinario);
+            $veterinario->addFarm($this); // Sincroniza o outro lado
         }
 
         return $this;
     }
 
+    /**
+     * MELHORIA: Adicionado a sincronização do lado inverso.
+     */
     public function removeVeterinario(Veterinarian $veterinario): static
     {
-        $this->veterinarios->removeElement($veterinario);
+        if ($this->veterinarios->removeElement($veterinario)) {
+             $veterinario->removeFarm($this); // Sincroniza o outro lado
+        }
 
         return $this;
     }
 
+    // Os métodos getCows, addCow e removeCow estão perfeitos e podem permanecer como estão.
     public function getCows(): Collection
     {
         return $this->cows;
@@ -131,7 +143,7 @@ class Farm
     public function removeCow(Cow $cow): static
     {
         if ($this->cows->removeElement($cow)) {
-
+            // set the owning side to null (unless already changed)
             if ($cow->getFazenda() === $this) {
                 $cow->setFazenda(null);
             }
