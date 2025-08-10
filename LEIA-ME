@@ -1,0 +1,9 @@
+# Leia-me do Projeto
+
+# Criar imagem e iniciar os containers
+docker compose up -d --build
+
+# Instalar dependências do PHP
+docker compose exec php composer install
+
+
