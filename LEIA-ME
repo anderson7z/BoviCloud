@@ -5,5 +5,3 @@ docker compose up -d --build
 
 # Instalar dependências do PHP
 docker compose exec php composer install
-
-
